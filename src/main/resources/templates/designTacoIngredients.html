@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Taco Cloud</title>
+    <link rel="stylesheet" th:href="@{/templates/css/designTacoIngredientsCSS.css}" />
+    <link rel="script" th:href="@{/templates/js/designTacoIngredientsJS.js}"/>
+</head>
+
+<body>
+<h1>Design Your Taco!</h1>
+<img id="TacoPic" th:src="@{/images/TacoCloud.png}"/>
+
+<form method="post" th:object="${taco}">
+
+<!--    wrap 包裹层-->
+    <div id="wraps">
+        <h3>Designate your wrap:</h3>
+        <div th:each="wrap:${WRAP}">
+            <input class="wrap" type="checkbox"  name="ingredients" th:value="${wrap.getName()}" />
+            <span th:text="${wrap.getName()}">wrap ingredients</span>
+        </div>
+    </div>
+
+<!--    蛋白质-->
+    <div id="proteins">
+        <h3>Designate your proteins:</h3>
+        <div th:each="protein:${PROTEIN}">
+            <input class="protein"  type="checkbox" name="ingredients" th:value="${protein.getName()}"/>
+            <span th:text="${protein.getName()}">wrap ingredients</span>
+        </div>
+    </div>
+
+<!--&lt;!&ndash;    vegetable 蔬菜&ndash;&gt;-->
+    <div id="vegetables">
+        <h3>Designate your vegetables:</h3>
+        <div th:each="vegetable:${VEGGIES}">
+            <input class="vegetable" type="checkbox" name="ingredients" th:value="${vegetable.getName()}"/>
+            <span th:text="${vegetable.getName()}">wrap ingredients</span>
+        </div>
+    </div>
+
+<!--&lt;!&ndash;    cheese 奶酪&ndash;&gt;-->
+    <div id="cheeses">
+        <h3>Designate your cheeses:</h3>
+        <div th:each="cheese:${CHEESE}">
+            <input class="cheese" type="checkbox" name="ingredients" th:value="${cheese.getName()}"/>
+            <span th:text="${cheese.getName()}">wrap ingredients</span>
+        </div>
+    </div>
+
+<!--&lt;!&ndash;    sauce 酱汁&ndash;&gt;-->
+    <div id="sauces">
+        <h3>Designate your sauces:</h3>
+        <div th:each="sauce:${SAUCE}">
+            <input class="sauce"  type="checkbox" name="ingredients" th:value="${sauce.getName()}"/>
+            <span th:text="${sauce.getName()}">wrap ingredients</span>
+        </div>
+    </div>
+
+    <div>
+        <label>请输入你的姓名：</label>
+        <input type="text"  th:field="*{name}"/>
+    </div>
+
+    <input type="submit" th:value="提交"/>
+</form>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

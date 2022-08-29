@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Taco Order</title>
+    <link rel="stylesheet" th:href="@{/templates/css/designOrderTacosCSS.css}"/>
+    <link rel="script" th:href="@{/templates/js/designOrderTacosJS.js}"/>
+</head>
+
+<h1>Taco Cloud</h1>
+
+<body>
+<form method="post" th:object="${order}">
+    <img th:src="@{/images/TacoCloud.png}"/>
+
+    <h2>design your taco details</h2>
+
+    <div>
+        <label for="consignee">收货人：</label>
+        <input th:type="text" id="consignee" th:field="*{consignee}"/>
+    </div>
+
+    <div>
+        <label for="deliveryAddress">收货地址：</label>
+        <input th:type="text" id="deliveryAddress" th:field="*{deliveryAddress}"/>
+    </div>
+
+    <div>
+        <label for="remarks">备注：</label>
+        <input th:type="text" id="remarks" th:field="*{remarks}"/>
+    </div>
+
+    <input th:type="submit" th:value="提交">
+</form>
+</body>

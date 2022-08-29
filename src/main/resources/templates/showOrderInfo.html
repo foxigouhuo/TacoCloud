@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<h1>Show Your Order Info!</h1>
+
+<form method="post">
+    <h3>Your Order Info:</h3>
+    <label th:text="${order.consignee}"></label><br>
+    <label th:text="${order.deliveryAddress}"></label><br>
+    <label th:text="${order.remarks}"></label><br><br>
+
+    <h3>Your Taco Ingredients:</h3><br>
+    <div th:each="ingredientName:${taco.ingredients}">
+        <label th:text="${ingredientName}"></label>
+    </div>
+</form>
