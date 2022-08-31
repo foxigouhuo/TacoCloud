@@ -2,6 +2,13 @@ package tacos;
 
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
 
 /**
  * ASUS
@@ -9,18 +16,15 @@ import lombok.Data;
  * 18:36
  */
 @Data
+@NoArgsConstructor
+@Entity
 public class Ingredient {
+    @Id
     private int id;
     private String name;
+    @Enumerated(EnumType.STRING)
     private Type type;
 
-    public Ingredient(int id,String name, Type type) {
-        this.id=id;
-        this.name = name;
-        this.type = type;
-    }
 
-    //配料类型
-    public static enum Type{WRAP,PROTEIN,VEGGIES,CHEESE,SAUCE};
 
 }

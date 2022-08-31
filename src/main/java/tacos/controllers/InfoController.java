@@ -1,6 +1,5 @@
 package tacos.controllers;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,16 +8,15 @@ import org.springframework.web.bind.support.SessionStatus;
 import tacos.Order;
 import tacos.Taco;
 import tacos.data.OrderRepo;
-import tacos.data.OrderRepoImpl;
 
 @Controller
 @RequestMapping("orderInfo")
 @SessionAttributes({"order","taco"})
 public class InfoController {
-    private OrderRepoImpl orderRepo;
+    private OrderRepo orderRepo;
 
     @Autowired
-    public InfoController(OrderRepoImpl orderRepo){
+    public InfoController(OrderRepo orderRepo){
         this.orderRepo=orderRepo;
     }
 

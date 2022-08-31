@@ -5,10 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tacos.Ingredient;
-import tacos.Order;
 import tacos.Taco;
-import tacos.data.IngredientRepoImpl;
-import tacos.data.TacoRepoImpl;
+import tacos.Type;
+import tacos.data.IngredientRepo;
+import tacos.data.TacoRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +22,14 @@ import java.util.List;
 @RequestMapping("/designTaco")
 @SessionAttributes("taco")
 public class IngredientController {
-    private final IngredientRepoImpl ingredientRepo;
-    private final TacoRepoImpl tacoRepo;
+    private final IngredientRepo ingredientRepo;
+    private final TacoRepo tacoRepo;
 
     @Autowired
-    public IngredientController(IngredientRepoImpl ingredientRepo, TacoRepoImpl tacoRepo) {
+    public IngredientController(IngredientRepo ingredientRepo, TacoRepo tacoRepo) {
         this.ingredientRepo = ingredientRepo;
         this.tacoRepo=tacoRepo;
     }
-
 
 
     @ModelAttribute("taco")
@@ -42,7 +41,7 @@ public class IngredientController {
     public String beginDesignTacoIngredients(Model model){
         List<Ingredient> ingredients=new ArrayList<>();
         ingredientRepo.findAll().forEach(ingredients::add);
-        for(Ingredient.Type type: Ingredient.Type.values()){
+        for(Type type: Type.values()){
             model.addAttribute(type.toString(),filterByType(type,ingredients));
         }
         return "designTacoIngredients";
@@ -50,8 +49,8 @@ public class IngredientController {
 
     @PostMapping
     public String getTacoIngredients (@ModelAttribute Taco taco) {
-//        System.out.println("ingredient："+taco);
-        taco.setId(tacoRepo.saveTaco(taco));
+        System.out.println("ingredient："+taco);
+//        tacoRepo.save(taco);
         return "redirect:tacoOrder";
     }
 
@@ -72,7 +71,7 @@ public class IngredientController {
 //        return ingredients;
 //    }
 //
-    public ArrayList<Ingredient> filterByType(Ingredient.Type type,List<Ingredient> ingredients){
+    public ArrayList<Ingredient> filterByType(Type type,List<Ingredient> ingredients){
         ArrayList<Ingredient> arrayList=new ArrayList<>();
         for(Ingredient ingredient:ingredients){
             if(ingredient.getType().equals(type)){
