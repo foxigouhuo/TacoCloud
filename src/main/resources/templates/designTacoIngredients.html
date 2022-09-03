@@ -11,7 +11,7 @@
 <h1>Design Your Taco!</h1>
 <img id="TacoPic" th:src="@{/images/TacoCloud.png}"/>
 
-<form method="post" th:object="${taco}">
+<form method="post" th:object="${tacoIngredients}">
 
 <!--    wrap 包裹层-->
     <div id="wraps">
@@ -60,7 +60,7 @@
 
     <div>
         <label>请输入你的姓名：</label>
-        <input type="text"  th:field="*{name}"/>
+        <input type="text"  th:field="${taco.name}"/>
     </div>
 
     <input type="submit" th:value="提交"/>

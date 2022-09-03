@@ -18,6 +18,7 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @Entity
+
 public class Ingredient {
     @Id
     private int id;

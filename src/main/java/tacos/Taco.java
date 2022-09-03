@@ -2,9 +2,7 @@ package tacos;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +15,8 @@ import java.util.List;
 @Entity
 public class Taco {
     @Id
-    private int id;
+    private String id;
     private String name;
-    @ManyToMany(targetEntity = Ingredient.class)
-    private List<Ingredient> ingredients;
+
 
 }

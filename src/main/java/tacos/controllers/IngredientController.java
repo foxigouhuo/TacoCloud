@@ -1,17 +1,18 @@
 package tacos.controllers;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import tacos.Ingredient;
-import tacos.Taco;
-import tacos.Type;
+import tacos.*;
 import tacos.data.IngredientRepo;
+import tacos.data.TacoIngredientsRepo;
 import tacos.data.TacoRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * ASUS
@@ -20,18 +21,23 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/designTaco")
-@SessionAttributes("taco")
+@SessionAttributes("order")
 public class IngredientController {
     private final IngredientRepo ingredientRepo;
     private final TacoRepo tacoRepo;
+    private final TacoIngredientsRepo tacoIngredientsRepo;
 
     @Autowired
-    public IngredientController(IngredientRepo ingredientRepo, TacoRepo tacoRepo) {
+    public IngredientController(IngredientRepo ingredientRepo, TacoRepo tacoRepo, TacoIngredientsRepo tacoIngredientsRepo) {
         this.ingredientRepo = ingredientRepo;
         this.tacoRepo=tacoRepo;
+        this.tacoIngredientsRepo = tacoIngredientsRepo;
     }
 
-
+    @ModelAttribute("tacoIngredients")
+    public IngredientsList tacoIngredients(){
+        return new IngredientsList();
+    }
     @ModelAttribute("taco")
     public Taco taco(){
         return new Taco();
@@ -48,29 +54,14 @@ public class IngredientController {
     }
 
     @PostMapping
-    public String getTacoIngredients (@ModelAttribute Taco taco) {
-        System.out.println("ingredient："+taco);
-//        tacoRepo.save(taco);
+    public String getTacoIngredients (@ModelAttribute IngredientsList ingredientsList,
+                                      @ModelAttribute Taco taco) {
+        saveTaco(taco,ingredientsList);
+        System.out.println("ingredient："+ingredientsList);
+        System.out.println(taco.getName());
         return "redirect:tacoOrder";
     }
 
-//    public static List<Ingredient> ingredients = Arrays.asList(
-//            new Ingredient("FLTO", "Flour Tortilla", Ingredient.Type.WRAP),
-//            new Ingredient("COTO", "Corn Tortilla", Ingredient.Type.WRAP),
-//            new Ingredient("GRBF", "Ground Beef", Ingredient.Type.PROTEIN),
-//            new Ingredient("CARN", "Carnitas", Ingredient.Type.PROTEIN),
-//            new Ingredient("TMTO", "Diced Tomatoes", Ingredient.Type.VEGETABLE),
-//            new Ingredient("LETC", "Lettuce", Ingredient.Type.VEGETABLE),
-//            new Ingredient("CHED", "Cheddar", Ingredient.Type.CHEESE),
-//            new Ingredient("JACK", "Monterrey Jack", Ingredient.Type.CHEESE),
-//            new Ingredient("SLSA", "Salsa", Ingredient.Type.SAUCE),
-//            new Ingredient("SRCR", "Sour Cream", Ingredient.Type.SAUCE)
-//    );
-//
-//    public static List<Ingredient> getIngredients(){
-//        return ingredients;
-//    }
-//
     public ArrayList<Ingredient> filterByType(Type type,List<Ingredient> ingredients){
         ArrayList<Ingredient> arrayList=new ArrayList<>();
         for(Ingredient ingredient:ingredients){
@@ -80,4 +71,25 @@ public class IngredientController {
         }
         return arrayList;
     }
+
+    private Order saveTaco(Taco taco, IngredientsList ingredientsList){
+        Order order=new Order();
+        String uuid= UUID.randomUUID().toString();
+        taco.setId(uuid);
+        TacoIngredient tacoIngredient = new TacoIngredient();
+        tacoIngredient.setTacoId(uuid);
+
+        tacoRepo.save(taco);
+        for(String ingredientName:ingredientsList.getIngredients()){
+            tacoIngredient.setIngredient(ingredientName);
+            tacoIngredientsRepo.save(tacoIngredient);
+        }
+        return order;
+    }
+
 }
+@Data
+class IngredientsList{
+    private List<String> ingredients;
+}
+
