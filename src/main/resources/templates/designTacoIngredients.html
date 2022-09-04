@@ -17,7 +17,7 @@
     <div id="wraps">
         <h3>Designate your wrap:</h3>
         <div th:each="wrap:${WRAP}">
-            <input class="wrap" type="checkbox"  name="ingredients" th:value="${wrap.getName()}" />
+            <input class="wrap" type="checkbox"  name="ingredients" th:value="${wrap.getId()}" />
             <span th:text="${wrap.getName()}">wrap ingredients</span>
         </div>
     </div>
@@ -26,7 +26,7 @@
     <div id="proteins">
         <h3>Designate your proteins:</h3>
         <div th:each="protein:${PROTEIN}">
-            <input class="protein"  type="checkbox" name="ingredients" th:value="${protein.getName()}"/>
+            <input class="protein"  type="checkbox" name="ingredients" th:value="${protein.getId()}"/>
             <span th:text="${protein.getName()}">wrap ingredients</span>
         </div>
     </div>
@@ -35,7 +35,7 @@
     <div id="vegetables">
         <h3>Designate your vegetables:</h3>
         <div th:each="vegetable:${VEGGIES}">
-            <input class="vegetable" type="checkbox" name="ingredients" th:value="${vegetable.getName()}"/>
+            <input class="vegetable" type="checkbox" name="ingredients" th:value="${vegetable.getId()}"/>
             <span th:text="${vegetable.getName()}">wrap ingredients</span>
         </div>
     </div>
@@ -44,7 +44,7 @@
     <div id="cheeses">
         <h3>Designate your cheeses:</h3>
         <div th:each="cheese:${CHEESE}">
-            <input class="cheese" type="checkbox" name="ingredients" th:value="${cheese.getName()}"/>
+            <input class="cheese" type="checkbox" name="ingredients" th:value="${cheese.getId()}"/>
             <span th:text="${cheese.getName()}">wrap ingredients</span>
         </div>
     </div>
@@ -53,7 +53,7 @@
     <div id="sauces">
         <h3>Designate your sauces:</h3>
         <div th:each="sauce:${SAUCE}">
-            <input class="sauce"  type="checkbox" name="ingredients" th:value="${sauce.getName()}"/>
+            <input class="sauce"  type="checkbox" name="ingredients" th:value="${sauce.getId()}"/>
             <span th:text="${sauce.getName()}">wrap ingredients</span>
         </div>
     </div>

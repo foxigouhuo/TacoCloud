@@ -1,7 +1,8 @@
-package tacos;
+package tacos.pojo;
 
 
 import lombok.Data;
+import tacos.TacoIngredientsUPK;
 
 import javax.persistence.*;
 
@@ -11,9 +12,9 @@ import javax.persistence.*;
 @Table(name = "taco_ingredients")
 public class TacoIngredient {
     @Id
-    @Column(name = "tacoid")
+    @Column(name = "taco_id")
     private String tacoId;
     @Id
-    @Column(name = "ingredient")
+    @Column(name = "ingredient_id")
     private String ingredient;
 }

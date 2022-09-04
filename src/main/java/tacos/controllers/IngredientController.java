@@ -7,8 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tacos.*;
 import tacos.data.IngredientRepo;
+import tacos.data.OrderTacoRepo;
 import tacos.data.TacoIngredientsRepo;
 import tacos.data.TacoRepo;
+import tacos.pojo.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +23,20 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping("/designTaco")
-@SessionAttributes("order")
+@SessionAttributes({"taco","tacoList"})
 public class IngredientController {
     private final IngredientRepo ingredientRepo;
     private final TacoRepo tacoRepo;
     private final TacoIngredientsRepo tacoIngredientsRepo;
-
+    private final OrderTacoRepo orderTacoRepo;
     @Autowired
-    public IngredientController(IngredientRepo ingredientRepo, TacoRepo tacoRepo, TacoIngredientsRepo tacoIngredientsRepo) {
+    public IngredientController(IngredientRepo ingredientRepo, TacoRepo tacoRepo, TacoIngredientsRepo tacoIngredientsRepo, OrderTacoRepo orderTacoRepo) {
         this.ingredientRepo = ingredientRepo;
         this.tacoRepo=tacoRepo;
         this.tacoIngredientsRepo = tacoIngredientsRepo;
+        this.orderTacoRepo = orderTacoRepo;
     }
+
 
     @ModelAttribute("tacoIngredients")
     public IngredientsList tacoIngredients(){
@@ -42,6 +46,11 @@ public class IngredientController {
     public Taco taco(){
         return new Taco();
     }
+    @ModelAttribute("tacoList")
+    public TacoList tacoList(){
+        return new TacoList();
+    }
+
 
     @GetMapping
     public String beginDesignTacoIngredients(Model model){
@@ -55,10 +64,10 @@ public class IngredientController {
 
     @PostMapping
     public String getTacoIngredients (@ModelAttribute IngredientsList ingredientsList,
-                                      @ModelAttribute Taco taco) {
+                                      @ModelAttribute Taco taco,
+                                      @ModelAttribute TacoList tacoList){
         saveTaco(taco,ingredientsList);
-        System.out.println("ingredient："+ingredientsList);
-        System.out.println(taco.getName());
+        tacoList.addTaco(taco);
         return "redirect:tacoOrder";
     }
 
@@ -72,24 +81,30 @@ public class IngredientController {
         return arrayList;
     }
 
-    private Order saveTaco(Taco taco, IngredientsList ingredientsList){
-        Order order=new Order();
+    private void saveTaco(Taco taco, IngredientsList ingredientsList){
         String uuid= UUID.randomUUID().toString();
         taco.setId(uuid);
+        tacoRepo.save(taco);
+
         TacoIngredient tacoIngredient = new TacoIngredient();
         tacoIngredient.setTacoId(uuid);
-
-        tacoRepo.save(taco);
         for(String ingredientName:ingredientsList.getIngredients()){
             tacoIngredient.setIngredient(ingredientName);
             tacoIngredientsRepo.save(tacoIngredient);
         }
-        return order;
     }
 
 }
 @Data
 class IngredientsList{
     private List<String> ingredients;
+}
+@Data
+class TacoList{
+    private List<Taco> tacos=new ArrayList<>();
+
+    public void addTaco(Taco taco){
+        tacos.add(taco);
+    }
 }
 

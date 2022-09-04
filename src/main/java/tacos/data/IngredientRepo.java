@@ -2,10 +2,7 @@ package tacos.data;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import tacos.Ingredient;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import tacos.pojo.Ingredient;
 
 /**
  * ASUS
@@ -15,4 +12,5 @@ import javax.persistence.PersistenceContext;
 @Repository
 public interface IngredientRepo extends CrudRepository<Ingredient,String> {
 
+    Ingredient findIngredientById(String id);
 }

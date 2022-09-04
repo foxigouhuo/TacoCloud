@@ -1,9 +1,10 @@
-package tacos;
+package tacos.pojo;
 
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import tacos.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,7 +22,7 @@ import javax.persistence.Id;
 
 public class Ingredient {
     @Id
-    private int id;
+    private String id;
     private String name;
     @Enumerated(EnumType.STRING)
     private Type type;
