@@ -10,26 +10,26 @@
 
 <h1>Taco Cloud</h1>
 
+
 <body>
+<a href="http://localhost:8080/designTaco">继续添加Taco</a>
+
 <form method="post" th:object="${order}">
     <img th:src="@{/images/TacoCloud.png}"/>
 
-    <h2>design your taco details</h2>
 
     <div>
-        <label for="consignee">收货人：</label>
-        <input th:type="text" id="consignee" th:field="*{consignee}"/>
+        <div th:each="taco:${order.list}">
+            <div th:text="${taco.getId()}">taco: </div>
+            <div th:if="${taco.getInfo() ne null}">
+                <div th:text="${taco.getInfo()}"></div>
+            </div>
+            <div th:each="ingredient:${taco.getList()}">
+                <span th:text="${ingredient}">tacoIngredient</span>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <label for="deliveryAddress">收货地址：</label>
-        <input th:type="text" id="deliveryAddress" th:field="*{deliveryAddress}"/>
-    </div>
-
-    <div>
-        <label for="remarks">备注：</label>
-        <input th:type="text" id="remarks" th:field="*{remarks}"/>
-    </div>
 
     <input th:type="submit" th:value="提交">
 </form>

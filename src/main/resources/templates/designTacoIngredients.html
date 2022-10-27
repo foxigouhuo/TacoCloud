@@ -6,61 +6,71 @@
     <link rel="stylesheet" th:href="@{/templates/css/designTacoIngredientsCSS.css}" />
     <link rel="script" th:href="@{/templates/js/designTacoIngredientsJS.js}"/>
 </head>
+<style>
+    .d1{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .h1{
+        text-align: center;
+    }
+    #TacoPic{
+        padding: 0 200px 0 200px;
+    }
+</style>
+<body id="body">
+<h1  style="text-align: center">Design Your Taco!</h1>
+<div id="TacoPic">
+    <img  th:src="@{/images/TacoCloud.png}" alt="this is a pic"/>
+</div>
 
-<body>
-<h1>Design Your Taco!</h1>
-<img id="TacoPic" th:src="@{/images/TacoCloud.png}"/>
-
-<form method="post" th:object="${tacoIngredients}">
+<!--<form method="post" th:object="${tacoIngredients}">-->
+<form method="post" th:object="${taco}">
 
 <!--    wrap 包裹层-->
     <div id="wraps">
-        <h3>Designate your wrap:</h3>
-        <div th:each="wrap:${WRAP}">
-            <input class="wrap" type="checkbox"  name="ingredients" th:value="${wrap.getId()}" />
+        <h3 class="h1">Designate your wrap:</h3>
+        <div class="d1" th:each="wrap:${WRAP}">
+            <input class="wrap" type="checkbox"  name="list" th:value="${wrap.getId()}" />
             <span th:text="${wrap.getName()}">wrap ingredients</span>
         </div>
     </div>
 
 <!--    蛋白质-->
     <div id="proteins">
-        <h3>Designate your proteins:</h3>
-        <div th:each="protein:${PROTEIN}">
-            <input class="protein"  type="checkbox" name="ingredients" th:value="${protein.getId()}"/>
+        <h3 class="h1">Designate your proteins:</h3>
+        <div class="d1" th:each="protein:${PROTEIN}">
+            <input class="protein"  type="checkbox" name="list" th:value="${protein.getId()}"/>
             <span th:text="${protein.getName()}">wrap ingredients</span>
         </div>
     </div>
 
-<!--&lt;!&ndash;    vegetable 蔬菜&ndash;&gt;-->
+<!--    vegetable 蔬菜-->
     <div id="vegetables">
-        <h3>Designate your vegetables:</h3>
-        <div th:each="vegetable:${VEGGIES}">
-            <input class="vegetable" type="checkbox" name="ingredients" th:value="${vegetable.getId()}"/>
+        <h3 class="h1">Designate your vegetables:</h3>
+        <div class="d1" th:each="vegetable:${VEGGIES}">
+            <input class="vegetable" type="checkbox" name="list" th:value="${vegetable.getId()}"/>
             <span th:text="${vegetable.getName()}">wrap ingredients</span>
         </div>
     </div>
 
-<!--&lt;!&ndash;    cheese 奶酪&ndash;&gt;-->
+<!--    cheese 奶酪-->
     <div id="cheeses">
-        <h3>Designate your cheeses:</h3>
-        <div th:each="cheese:${CHEESE}">
-            <input class="cheese" type="checkbox" name="ingredients" th:value="${cheese.getId()}"/>
+        <h3 class="h1">Designate your cheeses:</h3>
+        <div class="d1" th:each="cheese:${CHEESE}">
+            <input class="cheese" type="checkbox" name="list" th:value="${cheese.getId()}"/>
             <span th:text="${cheese.getName()}">wrap ingredients</span>
         </div>
     </div>
 
-<!--&lt;!&ndash;    sauce 酱汁&ndash;&gt;-->
+<!--    sauce 酱汁-->
     <div id="sauces">
-        <h3>Designate your sauces:</h3>
-        <div th:each="sauce:${SAUCE}">
-            <input class="sauce"  type="checkbox" name="ingredients" th:value="${sauce.getId()}"/>
+        <h3 class="h1">Designate your sauces:</h3>
+        <div class="d1" th:each="sauce:${SAUCE}">
+            <input class="sauce"  type="checkbox" name="list" th:value="${sauce.getId()}"/>
             <span th:text="${sauce.getName()}">wrap ingredients</span>
         </div>
-    </div>
-
-    <div>
-        <label>请输入你的姓名：</label>
-        <input type="text"  th:field="${taco.name}"/>
     </div>
 
     <input type="submit" th:value="提交"/>

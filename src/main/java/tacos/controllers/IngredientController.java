@@ -1,20 +1,21 @@
 package tacos.controllers;
 
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import tacos.*;
-import tacos.data.IngredientRepo;
-import tacos.data.OrderTacoRepo;
-import tacos.data.TacoIngredientsRepo;
-import tacos.data.TacoRepo;
-import tacos.pojo.*;
+import tacos.data.service.IngredientService;
+import tacos.data.service.OrderService;
+import tacos.data.service.TacoService;
+import tacos.data.service.Taco_IngredientService;
+import tacos.pojo.entity.Ingredient;
+import tacos.pojo.entity.Order;
+import tacos.pojo.entity.Taco;
+import tacos.pojo.enums.IngredientEnum;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * ASUS
@@ -23,88 +24,53 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping("/designTaco")
-@SessionAttributes({"taco","tacoList"})
 public class IngredientController {
-    private final IngredientRepo ingredientRepo;
-    private final TacoRepo tacoRepo;
-    private final TacoIngredientsRepo tacoIngredientsRepo;
-    private final OrderTacoRepo orderTacoRepo;
+    private final IngredientService ingredientService;
+    private final TacoService tacoService;
+    private final Taco_IngredientService taco_ingredientService;
+    private final HttpSession httpSession;
+
     @Autowired
-    public IngredientController(IngredientRepo ingredientRepo, TacoRepo tacoRepo, TacoIngredientsRepo tacoIngredientsRepo, OrderTacoRepo orderTacoRepo) {
-        this.ingredientRepo = ingredientRepo;
-        this.tacoRepo=tacoRepo;
-        this.tacoIngredientsRepo = tacoIngredientsRepo;
-        this.orderTacoRepo = orderTacoRepo;
+    public IngredientController(IngredientService ingredientService, TacoService tacoService, Taco_IngredientService taco_ingredientService, HttpSession httpSession) {
+        this.ingredientService = ingredientService;
+        this.tacoService = tacoService;
+        this.taco_ingredientService = taco_ingredientService;
+        this.httpSession = httpSession;
     }
-
-
-    @ModelAttribute("tacoIngredients")
-    public IngredientsList tacoIngredients(){
-        return new IngredientsList();
-    }
-    @ModelAttribute("taco")
-    public Taco taco(){
-        return new Taco();
-    }
-    @ModelAttribute("tacoList")
-    public TacoList tacoList(){
-        return new TacoList();
-    }
-
 
     @GetMapping
     public String beginDesignTacoIngredients(Model model){
-        List<Ingredient> ingredients=new ArrayList<>();
-        ingredientRepo.findAll().forEach(ingredients::add);
-        for(Type type: Type.values()){
-            model.addAttribute(type.toString(),filterByType(type,ingredients));
+        List<Ingredient> ingredients = new ArrayList<>(ingredientService.findAll());
+        for(IngredientEnum ingredientEnum: IngredientEnum.values()){
+            model.addAttribute(ingredientEnum.toString(),filterByType(ingredientEnum,ingredients));
         }
+        model.addAttribute(new Taco());
         return "designTacoIngredients";
     }
 
     @PostMapping
-    public String getTacoIngredients (@ModelAttribute IngredientsList ingredientsList,
-                                      @ModelAttribute Taco taco,
-                                      @ModelAttribute TacoList tacoList){
-        saveTaco(taco,ingredientsList);
-        tacoList.addTaco(taco);
+    public String getTacoIngredients (@ModelAttribute Taco taco){
+        saveTaco(taco);
+        System.out.println("getTacoIngredients");
         return "redirect:tacoOrder";
     }
 
-    public ArrayList<Ingredient> filterByType(Type type,List<Ingredient> ingredients){
+    public void saveTaco(Taco taco){
+        tacoService.saveTaco(taco);
+        taco_ingredientService.saveTaco(taco);
+        Order order=httpSession.getAttribute("order")==null?new Order(): (Order) httpSession.getAttribute("order");
+        order.addTaco(taco);
+        httpSession.setAttribute("order",order);
+    }
+    public ArrayList<Ingredient> filterByType(IngredientEnum ingredientEnum,List<Ingredient> ingredients){
         ArrayList<Ingredient> arrayList=new ArrayList<>();
         for(Ingredient ingredient:ingredients){
-            if(ingredient.getType().equals(type)){
+            if(ingredient.getType().equals(ingredientEnum)){
                 arrayList.add(ingredient);
             }
         }
         return arrayList;
     }
 
-    private void saveTaco(Taco taco, IngredientsList ingredientsList){
-        String uuid= UUID.randomUUID().toString();
-        taco.setId(uuid);
-        tacoRepo.save(taco);
-
-        TacoIngredient tacoIngredient = new TacoIngredient();
-        tacoIngredient.setTacoId(uuid);
-        for(String ingredientName:ingredientsList.getIngredients()){
-            tacoIngredient.setIngredient(ingredientName);
-            tacoIngredientsRepo.save(tacoIngredient);
-        }
-    }
-
-}
-@Data
-class IngredientsList{
-    private List<String> ingredients;
-}
-@Data
-class TacoList{
-    private List<Taco> tacos=new ArrayList<>();
-
-    public void addTaco(Taco taco){
-        tacos.add(taco);
-    }
 }
 
